@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عيد ميلاد سعيد يا أميرتي!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            font-family: 'Cairo', 'Arial', sans-serif;
+            overflow: hidden;
+            text-align: center;
+            min-height: 100vh;
+        }
+        .stars {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #ff4081;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle 2s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+            background: transparent;
+            color: #ff4081;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            line-height: 21px;
+            pointer-events: none;
+        }
+        #heart-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 1s;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .heart {
+            font-size: 170px;
+            color: #ff4081;
+            animation: beat 1s infinite alternate;
+            text-shadow: 0 0 40px #ff4081;
+            margin-bottom: 10px;
+        }
+        @keyframes beat {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.33); }
+        }
+        #message {
+            color: #ff4081;
+            font-size: 32px;
+            margin-top: 40px;
+            text-align: center;
+            max-width: 85vw;
+            text-shadow: 0 0 10px #ff4081;
+            letter-spacing: 1.8px;
+            font-weight: bold;
+        }
+        #book-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
+            background: #000;
+        }
+        .book {
+            width: 340px;
+            height: 470px;
+            perspective: 1500px;
+            position: relative;
+            margin-top: 12vh;
+        }
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border: 3px solid #ff4081;
+            border-radius: 15px;
+            padding: 32px 25px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #ff4081;
+            box-shadow: 0 0 30px rgba(255,64,129,0.3);
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1.6;
+        }
+        .title {
+            position: absolute;
+            top: 54px;
+            font-size: 38px;
+            color: #ff4081;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff4081;
+        }
+        #music-control {
+            position: fixed;
+            bottom: 34px;
+            right: 34px;
+            z-index: 200;
+            background: #ff4081;
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 20px #ff4081;
+            transition: all 0.3s;
+        }
+        #music-control:hover {
+            transform: scale(1.13);
+            background: #ff80ab;
+        }
+        #music-control i {
+            font-size: 34px;
+            color: black;
+        }
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .heart-particle {
+            position: absolute;
+            font-size: 22px;
+            color: #ff4081;
+            animation: float 4s linear infinite;
+            opacity: 0;
+            text-shadow: 0 0 8px #ff4081;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 0.5;
+            }
+            60% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg) scale(1.3);
+                opacity: 0;
+            }
+        }
+        /* وردة SVG متناسقة */
+        #flower-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 40;
+        }
+        #flower-message {
+            color: #ff4081;
+            font-size: 32px;
+            margin-top: 30px;
+            text-align: center;
+            max-width: 85vw;
+            text-shadow: 0 0 15px #ff4081;
+            letter-spacing: 1.8px;
+            font-weight: bold;
+            opacity: 1;
+            animation: fade-in 2s 2.5s forwards;
+            position: relative;
+        }
+        #flower-message::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #ff4081, transparent);
+            opacity: 0;
+            animation: line-appear 1s 3s forwards;
+        }
+        @keyframes fade-in {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes line-appear {
+            0% { width: 0; opacity: 0; }
+            100% { width: 100px; opacity: 0.7; }
+        }
+        .book-disappear {
+            animation: book-disappear 2s forwards;
+        }
+        @keyframes book-disappear {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: scale(0.8) rotate(5deg); opacity: 0.5; }
+            100% { transform: scale(1.5) rotate(10deg); opacity: 0; }
+        }
+
+        /* جديد: عداد الأيام */
+        #days-counter {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 110;
+            background: rgba(0,0,0,0.87);
+        }
+        #days-counter .days-title {
+            color: #ff4081;
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 22px;
+        }
+        #days-num {
+            color: #fff;
+            font-size: 88px;
+            font-weight: bolder;
+            text-shadow: 0 0 20px #ff4081;
+            transition: all 0.8s;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <canvas id="matrix"></canvas>
+    <div id="heart-container">
+        <div class="title" id="main-title"></div>
+        <div class="heart">❤️</div>
+        <div id="message"></div>
+    </div>
+    <div id="book-container">
+        <div class="title">رسالة من قلبي</div>
+        <div class="book">
+            <div class="page" id="page1">
+                كل عام وأنتِ قمري ونور عيوني<br>
+                كل عام و انتِ دُنيتي و هديه عمري<br>
+                كل عام و انتِ الحب الحقيقي<br>
+                كل عام و انتِ اجمل تفاصيل حياتي
+            </div>
+        </div>
+        <div class="hearts" id="hearts"></div>
+    </div>
+    <!-- وردة SVG متناسقة -->
+    <div id="flower-container">
+        <svg width="300" height="340" viewBox="0 0 300 340" style="display:block; margin:auto;">
+            <!-- ساق الوردة -->
+            <rect x="144" y="160" width="12" height="120" rx="6" fill="url(#stem)" />
+            <!-- أوراق -->
+            <ellipse cx="138" cy="220" rx="25" ry="10" fill="url(#leaf)" transform="rotate(-30 138 220)"/>
+            <ellipse cx="162" cy="245" rx="30" ry="12" fill="url(#leaf)" transform="rotate(25 162 245)"/>
+            <!-- بتلات -->
+            <g id="petals">
+              <!-- ترسم البتلات عبر جافاسكريبت -->
+            </g>
+            <!-- مركز الوردة -->
+            <circle cx="150" cy="150" r="36" fill="url(#center)" filter="url(#glow)"/>
+            <defs>
+              <linearGradient id="petal" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ffb6d1"/>
+                <stop offset="80%" stop-color="#ff4081"/>
+              </linearGradient>
+              <linearGradient id="stem" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#8bc34a"/>
+                <stop offset="100%" stop-color="#388e3c"/>
+              </linearGradient>
+              <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#b2ff59"/>
+                <stop offset="100%" stop-color="#4caf50"/>
+              </linearGradient>
+              <radialGradient id="center" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0%" stop-color="#fffde4"/>
+                <stop offset="100%" stop-color="#ffc107"/>
+              </radialGradient>
+              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+        </svg>
+        <div id="flower-message">وردة لا تموت</div>
+    </div>
+    <!-- عداد الأيام الجديد -->
+    <div id="days-counter">
+      <div class="days-title">عدد الأيام معًا</div>
+      <div id="days-num">0</div>
+    </div>
+    <div id="music-control" title="تشغيل / إيقاف الموسيقى">
+        <i class="fas fa-music"></i>
+    </div>
+    <audio id="bg-music" loop src="https://cdn1.esm3.com//music/34/wemaloh.mp3"></audio>
+    <script>
+        // نجوم الخلفية
+        function createStars() {
+            const stars = document.getElementById('stars');
+            for(let i=0;i<170;i++){
+                let star = document.createElement('div');
+                star.className = 'star';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.animationDelay = (Math.random()*2)+'s';
+                stars.appendChild(star);
+            }
+        }
+        createStars();
+
+        // تأثير المصفوفة
+        const matrix = document.getElementById('matrix');
+        const ctx = matrix.getContext('2d');
+        let w = window.innerWidth;
+        let h = window.innerHeight;
+        matrix.width = w;
+        matrix.height = h;
+        let fontSize = 20;
+        let columns = Math.floor(w / fontSize);
+        let drops = [];
+        let chars = "♡77♡";
+        for(let i=0;i<columns;i++) drops[i]=1;
+        function drawMatrix(){
+            ctx.fillStyle = "rgba(0,0,0,0.07)";
+            ctx.fillRect(0,0,w,h);
+            ctx.font = fontSize + "px Courier New";
+            ctx.fillStyle = "#ff4081";
+            for(let i=0;i<columns;i++){
+                let text = chars[Math.floor(Math.random()*chars.length)];
+                ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+                if(Math.random()>0.975) drops[i]=0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix,50);
+        window.addEventListener('resize',()=>{
+            w = window.innerWidth;
+            h = window.innerHeight;
+            matrix.width = w;
+            matrix.height = h;
+            columns = Math.floor(w / fontSize);
+            drops = [];
+            for(let i=0;i<columns;i++) drops[i]=1;
+        });
+
+        // عرض متسلسل: قلب > رسالة > كتاب > قلوب > وردة > عداد الأيام
+        const heartContainer = document.getElementById('heart-container');
+        const mainTitle = document.getElementById('main-title');
+        const message = document.getElementById('message');
+        const bookContainer = document.getElementById('book-container');
+        const flowerContainer = document.getElementById('flower-container');
+        const flowerMessage = document.getElementById('flower-message');
+
+        function showHeart(){
+            mainTitle.textContent = "عيد ميلاد سعيد يا أميرتي";
+            heartContainer.style.opacity = 1;
+            setTimeout(showMessage, 2500); // زيادة وقت ظهور الرسالة
+        }
+        function showMessage(){
+            message.innerHTML = "دايما...<br>أحبكِ  ❤";
+            setTimeout(()=> {
+                heartContainer.style.opacity = 0;
+                setTimeout(showBook, 1200);
+            }, 5000); // زيادة وقت بقاء الرسالة
+        }
+        function showBook(){
+            bookContainer.style.display = "flex";
+            animateHearts();
+            setTimeout(()=> {
+                bookContainer.classList.add('book-disappear');
+                setTimeout(()=>{
+                    bookContainer.style.display = "none";
+                    bookContainer.classList.remove('book-disappear');
+                    showFlower();
+                }, 1900);
+            }, 5000); // زيادة وقت عرض الكتاب
+        }
+        function showFlower(){
+            flowerContainer.style.display = "flex";
+            // رسم البتلات (12 بتلة متناسقة)
+            const petalCount = 12;
+            const group = document.getElementById('petals');
+            group.innerHTML = '';
+            for(let i=0;i<petalCount;i++){
+                const angle = (360/petalCount)*i;
+                const petal = document.createElementNS("http://www.w3.org/2000/svg",'ellipse');
+                petal.setAttribute('cx','150');
+                petal.setAttribute('cy','150');
+                petal.setAttribute('rx','32');
+                petal.setAttribute('ry','90');
+                petal.setAttribute('fill','url(#petal)');
+                petal.setAttribute('opacity','0');
+                petal.setAttribute('transform',`rotate(${angle} 150 150)`);
+                setTimeout(()=>{petal.setAttribute('opacity','1')}, 800 + i*120);
+                group.appendChild(petal);
+            }
+            // بعد الوردة، أظهر عداد الأيام
+            setTimeout(showDaysCounter, 10000); // بعد 10 ثواني من الوردة
+        }
+
+        // عداد الأيام معًا
+        function showDaysCounter(){
+            const counter = document.getElementById('days-counter');
+            const daysNum = document.getElementById('days-num');
+            counter.style.display = "flex";
+            // يمكنك احتساب الأيام تلقائياً أو يدويًا:
+            // let from = new Date("2022-05-01"); // أول يوم مع بعض
+            // let today = new Date();
+            // let daysTogether = Math.floor((today-from)/(1000*60*60*24));
+            let daysTogether = 826; // عدّل الرقم حسب مدة علاقتكم
+            let n = 0;
+            let speed = 0.7;
+            daysNum.style.fontSize = "88px";
+            daysNum.style.color = "#fff";
+            function animate() {
+                if(n < daysTogether) {
+                    daysNum.textContent = n;
+                    n += Math.ceil((daysTogether-n)/18) || 1;
+                    setTimeout(animate, speed*18);
+                    speed *= 0.93;
+                } else {
+                    daysNum.textContent = daysTogether;
+                    setTimeout(()=>{
+                        daysNum.style.color = "#ff4081";
+                        daysNum.style.fontSize = "144px";
+                        daysNum.textContent = "∞";
+                    }, 1200);
+                    setTimeout(()=>{
+                        counter.style.display = "none";
+                        resetShow(); // يعيد العرض من البداية أو ينتقل لمشهد جديد
+                    }, 3400);
+                }
+            }
+            animate();
+        }
+
+        function resetShow() {
+            flowerContainer.style.display = "none";
+            heartContainer.style.opacity = 0;
+            setTimeout(showHeart, 500);
+        }
+
+        // قلوب طائرة في صفحة الكتاب
+        function animateHearts(){
+            const hearts = document.getElementById('hearts');
+            hearts.innerHTML = ''; // تنظيف القلوب القديمة
+            for(let i=0;i<30;i++){
+                let h = document.createElement('div');
+                h.className = 'heart-particle';
+                h.style.left = Math.random()*100+'%';
+                h.style.bottom = '-30px';
+                h.style.animationDelay = (Math.random()*2)+'s';
+                h.innerHTML = Math.random() > 0.5 ? "❤" : "💖";
+                hearts.appendChild(h);
+            }
+        }
+
+        // كنترول الموسيقى
+        const music = document.getElementById('bg-music');
+        const musicControl = document.getElementById('music-control');
+        let isPlaying = false;
+        function playMusic(){
+            music.play().catch(()=>{});
+            isPlaying = true;
+            musicControl.style.background = "#ff4081";
+            musicControl.querySelector('i').classList.remove('fa-volume-mute');
+            musicControl.querySelector('i').classList.add('fa-music');
+        }
+        function pauseMusic(){
+            music.pause();
+            isPlaying = false;
+            musicControl.style.background = "#333";
+            musicControl.querySelector('i').classList.remove('fa-music');
+            musicControl.querySelector('i').classList.add('fa-volume-mute');
+        }
+        musicControl.onclick = ()=>{
+            if(isPlaying) pauseMusic();
+            else playMusic();
+        };
+
+        // تشغيل العرض تلقائياً عند التفاعل الأول
+        let started = false;
+        function startShow(){
+            if(started) return;
+            started = true;
+            setTimeout(showHeart, 400);
+            setTimeout(playMusic, 1200);
+        }
+        window.addEventListener("click", startShow, {once:true});
+        window.addEventListener("touchstart", startShow, {once:true});
+        window.addEventListener("keydown", startShow, {once:true});
+function explodeHeart() {
+    const heart = document.querySelector('.heart');
+    heart.innerHTML = '';
+    for(let i=0; i<20; i++) {
+        let smallHeart = document.createElement('div');
+        smallHeart.innerHTML = '❤️';
+        smallHeart.style.position = 'absolute';
+        smallHeart.style.fontSize = '20px';
+        smallHeart.style.animation = `float-heart ${Math.random()*3+2}s linear forwards`;
+        heart.appendChild(smallHeart);
+    }
+}
+        // تحسين الأداء: إخفاء الصوت بالضغط عليه في البداية حتى يبدأ التفاعل
+        pauseMusic();
+    </script>
+</body>
+</html>
