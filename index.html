@@ -332,7 +332,7 @@
     </div>
     <!-- عداد الأيام الجديد -->
     <div id="days-counter">
-      <div class="days-title">عدد الأيام معًا</div>
+      <div class="days-title">عدد الأيام و انا واقع</div>
       <div id="days-num">0</div>
     </div>
     <div id="music-control" title="تشغيل / إيقاف الموسيقى">
@@ -455,7 +455,7 @@
             // let daysTogether = Math.floor((today-from)/(1000*60*60*24));
             let daysTogether = 826; // عدّل الرقم حسب مدة علاقتكم
             let n = 0;
-            let speed = 0.7;
+            let speed = 0.9;
             daysNum.style.fontSize = "88px";
             daysNum.style.color = "#fff";
             function animate() {
@@ -463,13 +463,13 @@
                     daysNum.textContent = n;
                     n += Math.ceil((daysTogether-n)/18) || 1;
                     setTimeout(animate, speed*18);
-                    speed *= 0.93;
+                    speed *= 1.93;
                 } else {
                     daysNum.textContent = daysTogether;
                     setTimeout(()=>{
                         daysNum.style.color = "#ff4081";
                         daysNum.style.fontSize = "144px";
-                        daysNum.textContent = "∞";
+                        daysNum.textContent = "∞ ❤️";
                     }, 1200);
                     setTimeout(()=>{
                         counter.style.display = "none";
